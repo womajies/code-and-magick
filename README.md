@@ -1,0 +1,1 @@
+# Project «Code and Magick»
