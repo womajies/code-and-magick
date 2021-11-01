@@ -1,6 +1,11 @@
 root: true
 
+parserOptions:
+  ecmaVersion: 2018
+  sourceType: "module"
+
 env:
+  es2017: true
   browser: true
   node: true
 
@@ -8,8 +13,8 @@ globals:
   define: true
 
 extends:
-  "htmlacademy/es5"
+  "htmlacademy/vanilla"
 
-rules:
-  camelcase: [2, { properties: "never" }]
-  quotes: [2, "single"]
+// rules:
+//   camelcase: [2, { properties: "never" }]
+//   quotes: [2, "single"]
