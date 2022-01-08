@@ -1,6 +1,4 @@
-import {isEscEvent} from './utils.js';
-import {isEnterEvent} from './utils.js';
-import {renderSimilarList, clearSimilarList} from './similar-list.js';
+import {isEscEvent, isEnterEvent} from './utils.js';
 
 const userModalElement = document.querySelector('.setup');
 const userModalOpenElement = document.querySelector('.setup-open');
@@ -10,16 +8,14 @@ function openUserModal () {
   userModalElement.classList.remove('hidden');
   document.addEventListener('keydown', onPopupEscKeydown);
   userModalCloseElement.addEventListener('click', closeUserModal);
-  userModalCloseElement.addEventListener('keydown', enterKeydown);
-  renderSimilarList();
+  userModalCloseElement.addEventListener('keydown', onPopupCloseElementEnterKeydown);
 }
 
 function closeUserModal () {
   userModalElement.classList.add('hidden');
   document.removeEventListener('keydown', onPopupEscKeydown);
   userModalCloseElement.removeEventListener('click', closeUserModal);
-  userModalCloseElement.removeEventListener('keydown', enterKeydown);
-  clearSimilarList();
+  userModalCloseElement.removeEventListener('keydown', onPopupCloseElementEnterKeydown);
 }
 
 function onPopupEscKeydown (evt) {
@@ -29,7 +25,7 @@ function onPopupEscKeydown (evt) {
   }
 }
 
-function enterKeydown (evt) {
+function onPopupCloseElementEnterKeydown (evt) {
   if (isEnterEvent(evt)) {
     closeUserModal();
   }
@@ -42,4 +38,5 @@ userModalOpenElement.addEventListener('keydown', (evt) => {
 });
 
 userModalOpenElement.addEventListener('click', openUserModal);
-openUserModal();
+
+export {openUserModal, closeUserModal};
