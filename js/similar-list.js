@@ -3,24 +3,53 @@ const similarListElement = similarElement.querySelector('.setup-similar-list');
 const similarWizardTemplate = document.querySelector('#similar-wizard-template')
   .content
   .querySelector('.setup-similar-item');
+const Default = {
+  COAT__COLOR: 'rgb(101, 137, 164)',
+  EYES__COLOR: 'black',
+};
+const SIMILAR_WIZARD_COUNT = 4;
 
-function renderSimilarList (similarWizards) {
+function getWizardRank(wizard) {
+  const coatColorInput = document.querySelector('[name="coat-color"]');
+  const eyesColorInput = document.querySelector('[name="eyes-color"]');
+
+  let rank = 0;
+
+  if (wizard.colorCoat === (coatColorInput.value || Default.COAT__COLOR)) {
+    rank += 2;
+  }
+  if (wizard.colorEyes === (eyesColorInput.value || Default.EYES__COLOR)) {
+    rank += 1;
+  }
+
+  return rank;
+}
+
+function compareWizards(wizardA, wizardB) {
+  const rankA = getWizardRank(wizardA);
+  const rankB = getWizardRank(wizardB);
+
+  return rankB - rankA;
+}
+
+function renderSimilarList(similarWizards) {
   const similarListFragment = document.createDocumentFragment();
 
-  similarWizards.forEach(({name, colorCoat, colorEyes}) => {
-    const wizardElement = similarWizardTemplate.cloneNode(true);
-    wizardElement.querySelector('.setup-similar-label').textContent = name;
-    wizardElement.querySelector('.wizard-coat').style.fill = colorCoat;
-    wizardElement.querySelector('.wizard-eyes').style.fill = colorEyes;
-    similarListFragment.appendChild(wizardElement);
-  });
+  similarWizards
+    .slice()
+    .sort(compareWizards)
+    .slice(0, SIMILAR_WIZARD_COUNT)
+    .forEach(({ name, colorCoat, colorEyes }) => {
+      const wizardElement = similarWizardTemplate.cloneNode(true);
+      wizardElement.querySelector('.setup-similar-label').textContent = name;
+      wizardElement.querySelector('.wizard-coat').style.fill = colorCoat;
+      wizardElement.querySelector('.wizard-eyes').style.fill = colorEyes;
+      similarListFragment.appendChild(wizardElement);
+    });
 
+  similarListElement.innerHTML = '';
   similarListElement.appendChild(similarListFragment);
   similarElement.classList.remove('hidden');
 }
 
-const clearSimilarList = () => {
-  similarListElement.innerHTML = '';
-};
-
-export {renderSimilarList, clearSimilarList};
+export { renderSimilarList};
